@@ -1,0 +1,77 @@
+= Refrigerator
+
+Refrigerator offers an easy way to freeze all ruby core classes and modules.
+It's designed to be used in production to make sure that no code is making
+unexpected changes to core classes or modules at runtime.
+
+= Installation
+
+  gem install refrigerator
+
+= Source Code
+
+Source code is available on GitHub at https://github.com/jeremyevans/ruby-refrigerator
+
+= Usage
+
+After loading all of the code for your application, you can call the
++freeze_core+ method to freeze all core classes:
+
+  require 'refrigerator'
+  Refrigerator.freeze_core
+
+You can also pass an :except option to +freeze_core+ with an array of class names not to
+freeze:
+
+  Refrigerator.freeze_core(:except=>['BasicObject'])
+
+This will freeze all core classes, so that modifications to them at runtime will
+raise exceptions.
+
+Refrigerator also offers a +check_require+ method for checking libraries for issues:
+
+  Refrigerator.check_require('open3', :modules=>[:Open3])
+
+The +check_require+ method takes the following options:
+
+:modules :: Define the given module names before freezing the core (array of symbols)
+:classes :: Define the given class names before freezing the core (array of symbols
+            or two element arrays with class name symbol and superclass name symbol)
+:depends :: Any dependencies to require before freezing the core
+
+Without any options, this will likely raise an exception, as +check_require+
+freezes the core before requiring, and if the required files tries to add a
+class or module to the namespace, that will fail.  The :modules and :classes
+options exist so that you can predefine the class so that the required file
+will reopen the existing class instead of defining a new class.
+
+The :depends option can be easily used to load all dependencies of the required
+file before freezing the core.  This is also necessary in most cases, especially
+when using the stdlib, since many stdlib files modify the core classes in ways
+beyond adding modules or classes.
+
+Here's an example using Sequel:
+
+  Refrigerator.check_require 'sequel',
+    :depends=>%w'bigdecimal date thread time uri',
+    :modules=>[:Sequel]
+
+And an example using Roda:
+ 
+  Refrigerator.check_require 'roda',
+    :depends=>%w'rack uri fileutils set tmpdir tempfile thread date time',
+    :classes=>[:Roda]
+
+Note that many stdlib libraries will fail +check_require+, for example, +set+:
+
+  Refrigerator.check_require 'set',
+    :classes=>[:Set, [:SortedSet, :Set]]
+  # Fails due to Enumerable#to_set addition
+
+= License
+
+MIT
+
+= Author
+
+Jeremy Evans <code@jeremyevans.net>
