@@ -1,0 +1,42 @@
+#!/usr/bin/env ruby
+# frozen-string-literal: true
+
+require 'optparse'
+require File.join(File.expand_path(__FILE__), '../../lib/refrigerator')
+
+cr_opts = {:modules => [], :classes => [], :depends => [], :exclude => []}
+
+options = OptionParser.new do |opts|
+  opts.banner = "Usage: check_require [options] path"
+  opts.separator ""
+  opts.separator "Options:"
+
+  opts.on_tail("-h", "-?", "--help", "Show this message") do
+    puts opts
+    exit
+  end
+
+  opts.on("-m", "--modules [Module1,Module2]", "define given modules under Object before freezing core classes") do  |v|
+    cr_opts[:modules].concat v.split(',').map(&:to_sym)
+  end
+  
+  opts.on("-c", "--classes [Class1,Class2]", "define given modules under Object before freezing core classes") do  |v|
+    cr_opts[:classes].concat v.split(',').map(&:to_sym)
+  end
+  
+  opts.on("-r", "--require [foo,bar/baz]", "require given libraries before freezing core classes") do  |v|
+    cr_opts[:depends].concat v.split(',')
+  end
+  
+  opts.on("-e", "--exclude [Object,Array]", "exclude given core classes from freezing") do  |v|
+    cr_opts[:exclude].concat v.split(',')
+  end
+end
+options.parse!
+
+if ARGV.length != 1
+  puts options
+  exit 1
+end
+
+Refrigerator.check_require(ARGV.first, cr_opts)

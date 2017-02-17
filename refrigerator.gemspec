@@ -10,7 +10,9 @@ spec = Gem::Specification.new do |s|
   s.author = "Jeremy Evans"
   s.email = "code@jeremyevans.net"
   s.homepage = "http://github.com/jeremyevans/ruby-refrigerator"
-  s.files = %w(MIT-LICENSE CHANGELOG README.rdoc Rakefile) + Dir["{spec,lib}/**/*.rb"] + Dir['module_names/*.txt']
+  s.files = %w(MIT-LICENSE CHANGELOG README.rdoc Rakefile bin/check_require) + Dir["{spec,lib}/**/*.rb"] + Dir['module_names/*.txt']
+  s.bindir = 'bin'
+  s.executables << 'check_require'
   s.description = <<END
 Refrigerator freezes all core classes.  It is designed to be used
 in production, to make sure that none of the core classes are

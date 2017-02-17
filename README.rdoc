@@ -14,6 +14,8 @@ Source code is available on GitHub at https://github.com/jeremyevans/ruby-refrig
 
 = Usage
 
+== freeze_core
+
 After loading all of the code for your application, you can call the
 +freeze_core+ method to freeze all core classes:
 
@@ -32,7 +34,13 @@ One reason to exclude certain classes is because you know they will be modified 
 runtime.  For example, tilt (the ruby template library) modifies BasicObject at runtime 
 as part of template compilation.
 
-Refrigerator also offers a +check_require+ method for checking libraries for issues:
+== check_require
+
+Refrigerator also offers a +check_require+ method for checking libraries for modifications
+to the core classes.  It allows you to easily see what fails when when you try to require
+the library with a frozen core, and offers some options that you can use to try to get
+the require to not raise an exception.  This allows you to see what changes the library
+makes to the core classes.  Here's an example of basic use:
 
   Refrigerator.check_require('open3', :modules=>[:Open3])
 
@@ -41,37 +49,102 @@ The +check_require+ method takes the following options:
 :modules :: Define the given module names before freezing the core (array of symbols)
 :classes :: Define the given class names before freezing the core (array of symbols
             or two element arrays with class name symbol and superclass name symbol)
-:exclude :: Exclude the given class/module names from freezing.
-:depends :: Any dependencies to require before freezing the core
+:exclude :: Exclude the given class/module names from freezin (array of strings)
+:depends :: Any dependencies to require before freezing the core (array of strings)
 
-Without any options, this will likely raise an exception, as +check_require+
+Without any options, +check_require+ will likely raise an exception, as it
 freezes the core before requiring, and if the required files tries to add a
-class or module to the namespace, that will fail.  The :modules and :classes
+class or module to the global namespace, that will fail.  The :modules and :classes
 options exist so that you can predefine the class so that the required file
 will reopen the existing class instead of defining a new class.
 
 The :depends option can be easily used to load all dependencies of the required
 file before freezing the core.  This is also necessary in most cases, especially
 when using the stdlib, since many stdlib files modify the core classes in ways
-beyond adding modules or classes.
+beyond adding modules or classes. The :exclude option is basically a last resort,
+where you can disable the freezing of certain core classes, if you know the
+required library modifies them.
 
-Here's an example using Sequel:
+Here's an example using Sequel, a ruby database toolkit:
 
   Refrigerator.check_require 'sequel',
     :depends=>%w'bigdecimal date thread time uri',
     :modules=>[:Sequel]
 
-And an example using Roda:
+And an example using Roda, a ruby web toolkit:
  
   Refrigerator.check_require 'roda',
     :depends=>%w'rack uri fileutils set tmpdir tempfile thread date time',
     :classes=>[:Roda]
 
-Note that many stdlib libraries will fail +check_require+, for example, +set+:
+Note that many stdlib libraries will fail +check_require+ unless you use the
+:exclude option, for example, +set+:
 
   Refrigerator.check_require 'set',
     :classes=>[:Set, [:SortedSet, :Set]]
   # Fails due to Enumerable#to_set addition
+
+=== bin/check_require
+
+refrigerator ships with a +check_require+ binary that offers access to
++Refrigerator.check_require+ from the command line.  Here's the usage:
+
+  $ bin/check_require
+  Usage: check_require [options] path
+
+  Options:
+      -m, --modules [Module1,Module2]  define given modules under Object before freezing core classes
+      -c, --classes [Class1,Class2]    define given modules under Object before freezing core classes
+      -r, --require [foo,bar/baz]      require given libraries before freezing core classes
+      -e, --exclude [Object,Array]     exclude given core classes from freezing
+      -h, -?, --help                   Show this message
+
+You can use this to easily check ruby libraries for issues when requiring.  For example, let's try
+with +open3+:
+
+  $ bin/check_require open3
+  /usr/local/lib/ruby/2.4/open3.rb:32:in `<top (required)>': can't modify frozen #<Class:Object> (RuntimeError)
+          from /usr/local/lib/ruby/2.4/rubygems/core_ext/kernel_require.rb:55:in `require'
+          from /usr/local/lib/ruby/2.4/rubygems/core_ext/kernel_require.rb:55:in `require'
+          from /data/code/ruby-refrigerator/lib/refrigerator.rb:35:in `check_require'
+          from bin/check_require:42:in `<main>'
+  $ bin/check_require -m Open3 open3
+
+As displayed above, open3 does not modify any core classes, beyond defining the +Open3+ module.
+
+Let's try with +date+:
+
+  $ bin/check_require date
+  /usr/local/lib/ruby/2.4/rubygems/core_ext/kernel_require.rb:55:in `require': can't modify frozen #<Class:Object> (RuntimeError)
+          from /usr/local/lib/ruby/2.4/rubygems/core_ext/kernel_require.rb:55:in `require'
+          from /usr/local/lib/ruby/2.4/date.rb:4:in `<top (required)>'
+          from /usr/local/lib/ruby/2.4/rubygems/core_ext/kernel_require.rb:55:in `require'
+          from /usr/local/lib/ruby/2.4/rubygems/core_ext/kernel_require.rb:55:in `require'
+          from /data/code/ruby-refrigerator/lib/refrigerator.rb:35:in `check_require'
+          from bin/check_require:42:in `<main>'
+  $ bin/check_require -e Object date
+  /usr/local/lib/ruby/2.4/rubygems/core_ext/kernel_require.rb:55:in `require': can't modify frozen class (RuntimeError)
+          from /usr/local/lib/ruby/2.4/rubygems/core_ext/kernel_require.rb:55:in `require'
+          from /usr/local/lib/ruby/2.4/date.rb:4:in `<top (required)>'
+          from /usr/local/lib/ruby/2.4/rubygems/core_ext/kernel_require.rb:55:in `require'
+          from /usr/local/lib/ruby/2.4/rubygems/core_ext/kernel_require.rb:55:in `require'
+          from /data/code/ruby-refrigerator/lib/refrigerator.rb:35:in `check_require'
+          from bin/check_require:42:in `<main>'
+  $ bin/check_require -e Object,Time date
+
+The first failure is because +date+ defines the +Date+ and +DateTime+ classes. Because
++date+ is a native library written in C, you can't define the classes in advance, so
+you have to exclude the freezing of +Object+.  Note that it still fails in that case, but
+it doesn't even tell you why.  It turns out the reason is that +date+ also adds <tt>Time#to_date</tt>
+and other methods, so you need to exclude the freezing of +Time+ as well.
+
+Here are a couple more examples, using Sequel and Roda:
+
+  bin/check_require -m Sequel -r bigdecimal,date,thread,time,uri sequel
+  bin/check_require -c Roda -r rack,uri,fileutils,set,tmpdir,tempfile,thread,date,time roda
+
+Note that +bin/check_require+'s `-c` option does not support classes that do not subclass
+from +Object+.  You must use the +Refrigerator.check_require+ API in that case.
 
 = License
 
