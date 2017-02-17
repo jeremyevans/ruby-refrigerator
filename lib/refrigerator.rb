@@ -13,9 +13,6 @@ module Refrigerator
   # Default frozen options hash
   OPTS = {}.freeze
 
-  # The default exceptions check_require uses when freezing the core.
-  CHECK_REQUIRE_FREEZE_OPTS = {:except=> %w'Gem Gem::Specification'.freeze.each(&:freeze)}.freeze
-
   # Freeze core classes and modules.  Options:
   # :except :: Don't freeze any of the classes modules listed (array of strings)
   def self.freeze_core(opts=OPTS)
@@ -28,12 +25,13 @@ module Refrigerator
   # :modules :: Define the given modules in the Object namespace before freezing the core (array of module name symbols)
   # :classes :: Define the given classes in the Object namespace before freezing the core (array of either class name Symbols or
   #             array with class Name Symbol and Superclass name string)
+  # :except :: Don't freeze any of the classes modules listed (array of strings)
   def self.check_require(file, opts=OPTS)
     require 'rubygems'
     Array(opts[:depends]).each{|f| require f}
     Array(opts[:modules]).each{|m| Object.const_set(m, Module.new)}
     Array(opts[:classes]).each{|c, *sc| Object.const_set(c, Class.new(sc.empty? ? Object : eval(sc.first)))}
-    freeze_core(CHECK_REQUIRE_FREEZE_OPTS)
+    freeze_core(:except=>%w'Gem Gem::Specification'+Array(opts[:exclude]))
     require file
   end
 

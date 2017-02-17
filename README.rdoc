@@ -20,13 +20,17 @@ After loading all of the code for your application, you can call the
   require 'refrigerator'
   Refrigerator.freeze_core
 
+This will freeze all core classes, so that modifications to them at runtime will
+raise exceptions.
+
 You can also pass an :except option to +freeze_core+ with an array of class names not to
 freeze:
 
   Refrigerator.freeze_core(:except=>['BasicObject'])
 
-This will freeze all core classes, so that modifications to them at runtime will
-raise exceptions.
+One reason to exclude certain classes is because you know they will be modified at
+runtime.  For example, tilt (the ruby template library) modifies BasicObject at runtime 
+as part of template compilation.
 
 Refrigerator also offers a +check_require+ method for checking libraries for issues:
 
@@ -37,6 +41,7 @@ The +check_require+ method takes the following options:
 :modules :: Define the given module names before freezing the core (array of symbols)
 :classes :: Define the given class names before freezing the core (array of symbols
             or two element arrays with class name symbol and superclass name symbol)
+:exclude :: Exclude the given class/module names from freezing.
 :depends :: Any dependencies to require before freezing the core
 
 Without any options, this will likely raise an exception, as +check_require+

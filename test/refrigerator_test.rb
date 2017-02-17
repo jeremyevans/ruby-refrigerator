@@ -53,11 +53,12 @@ describe "Refrigerator" do
     END
   end
 
-  it '.check_require should support :modules, :classes, and :depends options' do
+  it '.check_require should support :modules, :classes, :depends, and :exclude options' do
     check("raise unless (Refrigerator.check_require(#{EXAMPLE.inspect}) rescue :foo) == :foo")
     check("raise unless (Refrigerator.check_require(#{EXAMPLE.inspect}, :depends=>%w'set') rescue :foo) == :foo")
     check("raise unless (Refrigerator.check_require(#{EXAMPLE.inspect}, :depends=>%w'set', :modules=>[:A]) rescue :foo) == :foo")
     check("raise unless (Refrigerator.check_require(#{EXAMPLE.inspect}, :depends=>%w'set', :modules=>[:A], :classes=>[:B]) rescue :foo) == :foo")
     check("Refrigerator.check_require(#{EXAMPLE.inspect}, :depends=>%w'set', :modules=>[:A], :classes=>[:B, [:C, 'B']])")
+    check("Refrigerator.check_require(#{EXAMPLE.inspect}, :exclude=>%w'Object Enumerable')")
   end
 end
