@@ -5,7 +5,7 @@ module Refrigerator
   
   # Array of strings containing class or module names.
   CORE_MODULES = File.read(File.expand_path(File.join(File.expand_path(__FILE__), "../../module_names/#{version_int}.txt"))).
-    split.
+    split(/\s+/).
     select{|m| eval("defined?(#{m})")}.
     each(&:freeze).
     freeze
