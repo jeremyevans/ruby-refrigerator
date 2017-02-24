@@ -1,3 +1,7 @@
+=== master
+
+* Work when the input field separator is changed from the default (jeremyevans) (#1)
+
 === 1.0.0 (2017-02-17)
 
 * Initial Public Release
