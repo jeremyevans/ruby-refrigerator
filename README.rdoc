@@ -25,6 +25,9 @@ After loading all of the code for your application, you can call the
 This will freeze all core classes, so that modifications to them at runtime will
 raise exceptions.
 
+In a rack-based application, a good place to call `freeze_core` is at the end of the
+`config.ru` file.
+
 You can also pass an :except option to +freeze_core+ with an array of class names not to
 freeze:
 
