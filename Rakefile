@@ -8,6 +8,14 @@ task :package=>[:clean] do |p|
   sh %{#{FileUtils::RUBY} -S gem build refrigerator.gemspec}
 end
 
+### Generate module_names
+
+desc "Generate module_names/*.txt file for current ruby version"
+task :module_names do
+  sh "#{FileUtils::RUBY} -e 'a = []; ObjectSpace.each_object(Module){|m| a << m.name.to_s}; File.open(\"module_names/#{RUBY_VERSION[0..2].sub('.', '')}.txt\", \"wb\"){|f| f.write(a.reject{|m| m.empty?}.sort.join(\"\\n\")); f.write(\"\\n\")}'"
+end
+
+
 ### Specs
 
 desc "Run specs"
