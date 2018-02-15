@@ -1,6 +1,6 @@
 spec = Gem::Specification.new do |s|
   s.name = 'refrigerator'
-  s.version = '1.0.0'
+  s.version = '1.1.0'
   s.platform = Gem::Platform::RUBY
   s.has_rdoc = true
   s.extra_rdoc_files = ["README.rdoc", "CHANGELOG", "MIT-LICENSE"]
@@ -11,6 +11,7 @@ spec = Gem::Specification.new do |s|
   s.email = "code@jeremyevans.net"
   s.homepage = "http://github.com/jeremyevans/ruby-refrigerator"
   s.files = %w(MIT-LICENSE CHANGELOG README.rdoc Rakefile bin/check_require) + Dir["{spec,lib}/**/*.rb"] + Dir['module_names/*.txt']
+  s.required_ruby_version = ">= 1.8.7"
   s.bindir = 'bin'
   s.executables << 'check_require'
   s.description = <<END

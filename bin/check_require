@@ -20,8 +20,8 @@ options = OptionParser.new do |opts|
     cr_opts[:modules].concat v.split(',').map(&:to_sym)
   end
   
-  opts.on("-c", "--classes [Class1,Class2]", "define given modules under Object before freezing core classes") do  |v|
-    cr_opts[:classes].concat v.split(',').map(&:to_sym)
+  opts.on("-c", "--classes [Class1,Class2/SuperclassOfClass2]", "define given classes under Object before freezing core classes") do  |v|
+    cr_opts[:classes].concat v.split(',').map{|s| s.include?('/') ? s.split('/').map(&:to_sym) : s.to_sym}
   end
   
   opts.on("-r", "--require [foo,bar/baz]", "require given libraries before freezing core classes") do  |v|

@@ -1,8 +1,8 @@
 = Refrigerator
 
 Refrigerator offers an easy way to freeze all ruby core classes and modules.
-It's designed to be used in production to make sure that no code is making
-unexpected changes to core classes or modules at runtime.
+It's designed to be used in production and when testing to make sure that no
+code is making unexpected changes to core classes or modules at runtime.
 
 = Installation
 
@@ -34,8 +34,7 @@ freeze:
   Refrigerator.freeze_core(:except=>['BasicObject'])
 
 One reason to exclude certain classes is because you know they will be modified at
-runtime.  For example, tilt (the ruby template library) modifies BasicObject at runtime 
-as part of template compilation.
+runtime.
 
 == check_require
 
@@ -52,7 +51,7 @@ The +check_require+ method takes the following options:
 :modules :: Define the given module names before freezing the core (array of symbols)
 :classes :: Define the given class names before freezing the core (array of symbols
             or two element arrays with class name symbol and superclass name symbol)
-:exclude :: Exclude the given class/module names from freezin (array of strings)
+:exclude :: Exclude the given class/module names from freezing (array of strings)
 :depends :: Any dependencies to require before freezing the core (array of strings)
 
 Without any options, +check_require+ will likely raise an exception, as it
@@ -87,6 +86,11 @@ Note that many stdlib libraries will fail +check_require+ unless you use the
     :classes=>[:Set, [:SortedSet, :Set]]
   # Fails due to Enumerable#to_set addition
 
+  Refrigerator.check_require 'set',
+    :classes=>[:Set, [:SortedSet, :Set]],
+    :exclude=>['Enumerable']
+  # => true
+
 === bin/check_require
 
 refrigerator ships with a +check_require+ binary that offers access to
@@ -96,21 +100,23 @@ refrigerator ships with a +check_require+ binary that offers access to
   Usage: check_require [options] path
 
   Options:
-      -m, --modules [Module1,Module2]  define given modules under Object before freezing core classes
-      -c, --classes [Class1,Class2]    define given modules under Object before freezing core classes
-      -r, --require [foo,bar/baz]      require given libraries before freezing core classes
-      -e, --exclude [Object,Array]     exclude given core classes from freezing
-      -h, -?, --help                   Show this message
+    -m, --modules [Module1,Module2]  define given modules under Object before freezing core classes
+    -c [Class1,Class2/SuperclassOfClass2],
+        --classes                    define given classes under Object before freezing core classes
+    -r, --require [foo,bar/baz]      require given libraries before freezing core classes
+    -e, --exclude [Object,Array]     exclude given core classes from freezing
+    -h, -?, --help                   Show this message
 
 You can use this to easily check ruby libraries for issues when requiring.  For example, let's try
 with +open3+:
 
   $ bin/check_require open3
-  /usr/local/lib/ruby/2.4/open3.rb:32:in `<top (required)>': can't modify frozen #<Class:Object> (RuntimeError)
-          from /usr/local/lib/ruby/2.4/rubygems/core_ext/kernel_require.rb:55:in `require'
-          from /usr/local/lib/ruby/2.4/rubygems/core_ext/kernel_require.rb:55:in `require'
-          from /data/code/ruby-refrigerator/lib/refrigerator.rb:35:in `check_require'
-          from bin/check_require:42:in `<main>'
+  Traceback (most recent call last):
+          4: from bin/check_require:42:in `<main>'
+          3: from /home/billg/ruby-refrigerator/lib/refrigerator.rb:35:in `check_require'
+          2: from /usr/local/lib/ruby/2.5/rubygems/core_ext/kernel_require.rb:59:in `require'
+          1: from /usr/local/lib/ruby/2.5/rubygems/core_ext/kernel_require.rb:59:in `require'
+  /usr/local/lib/ruby/2.5/open3.rb:32:in `<top (required)>': can't modify frozen #<Class:Object> (FrozenError)
   $ bin/check_require -m Open3 open3
 
 As displayed above, open3 does not modify any core classes, beyond defining the +Open3+ module.
@@ -118,36 +124,35 @@ As displayed above, open3 does not modify any core classes, beyond defining the 
 Let's try with +date+:
 
   $ bin/check_require date
-  /usr/local/lib/ruby/2.4/rubygems/core_ext/kernel_require.rb:55:in `require': can't modify frozen #<Class:Object> (RuntimeError)
-          from /usr/local/lib/ruby/2.4/rubygems/core_ext/kernel_require.rb:55:in `require'
-          from /usr/local/lib/ruby/2.4/date.rb:4:in `<top (required)>'
-          from /usr/local/lib/ruby/2.4/rubygems/core_ext/kernel_require.rb:55:in `require'
-          from /usr/local/lib/ruby/2.4/rubygems/core_ext/kernel_require.rb:55:in `require'
-          from /data/code/ruby-refrigerator/lib/refrigerator.rb:35:in `check_require'
-          from bin/check_require:42:in `<main>'
-  $ bin/check_require -e Object date
-  /usr/local/lib/ruby/2.4/rubygems/core_ext/kernel_require.rb:55:in `require': can't modify frozen class (RuntimeError)
-          from /usr/local/lib/ruby/2.4/rubygems/core_ext/kernel_require.rb:55:in `require'
-          from /usr/local/lib/ruby/2.4/date.rb:4:in `<top (required)>'
-          from /usr/local/lib/ruby/2.4/rubygems/core_ext/kernel_require.rb:55:in `require'
-          from /usr/local/lib/ruby/2.4/rubygems/core_ext/kernel_require.rb:55:in `require'
-          from /data/code/ruby-refrigerator/lib/refrigerator.rb:35:in `check_require'
-          from bin/check_require:42:in `<main>'
-  $ bin/check_require -e Object,Time date
+  Traceback (most recent call last):
+          6: from bin/check_require:42:in `<main>'
+          5: from /home/billg/ruby-refrigerator/lib/refrigerator.rb:35:in `check_require'
+          4: from /usr/local/lib/ruby/2.5/rubygems/core_ext/kernel_require.rb:59:in `require'
+          3: from /usr/local/lib/ruby/2.5/rubygems/core_ext/kernel_require.rb:59:in `require'
+          2: from /usr/local/lib/ruby/2.5/date.rb:4:in `<top (required)>'
+          1: from /usr/local/lib/ruby/2.5/rubygems/core_ext/kernel_require.rb:59:in `require'
+  /usr/local/lib/ruby/2.5/rubygems/core_ext/kernel_require.rb:59:in `require': can't modify frozen #<Class:Object> (FrozenError)
+  $ bin/check_require -c Date,DateTime/Date date
+  Traceback (most recent call last):
+          6: from bin/check_require:42:in `<main>'
+          5: from /home/billg/ruby-refrigerator/lib/refrigerator.rb:35:in `check_require'
+          4: from /usr/local/lib/ruby/2.5/rubygems/core_ext/kernel_require.rb:59:in `require'
+          3: from /usr/local/lib/ruby/2.5/rubygems/core_ext/kernel_require.rb:59:in `require'
+          2: from /usr/local/lib/ruby/2.5/date.rb:4:in `<top (required)>'
+          1: from /usr/local/lib/ruby/2.5/rubygems/core_ext/kernel_require.rb:59:in `require'
+  /usr/local/lib/ruby/2.5/rubygems/core_ext/kernel_require.rb:59:in `require': can't modify frozen class (FrozenError)
+  $ bin/check_require -c Date,DateTime/Date -e Time date
 
-The first failure is because +date+ defines the +Date+ and +DateTime+ classes. Because
-+date+ is a native library written in C, you can't define the classes in advance, so
-you have to exclude the freezing of +Object+.  Note that it still fails in that case, but
-it doesn't even tell you why.  It turns out the reason is that +date+ also adds <tt>Time#to_date</tt>
-and other methods, so you need to exclude the freezing of +Time+ as well.
+The first failure is because +date+ defines the +Date+ and +DateTime+ classes, so you
+must define those classes first, using a slash to separate DateTime from the superclass
+Date. Note that it still fails in that case, but it doesn't even tell you why.  It turns
+out the reason is that +date+ also adds +to_date+ and other methods to +Time+, so you
+need to exclude the freezing of +Time+ as well.
 
 Here are a couple more examples, using Sequel and Roda:
 
   bin/check_require -m Sequel -r bigdecimal,date,thread,time,uri sequel
   bin/check_require -c Roda -r rack,uri,fileutils,set,tmpdir,tempfile,thread,date,time roda
-
-Note that +bin/check_require+'s `-c` option does not support classes that do not subclass
-from +Object+.  You must use the +Refrigerator.check_require+ API in that case.
 
 == Supporting new ruby minor versions
 
