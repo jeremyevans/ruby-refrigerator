@@ -37,10 +37,10 @@ describe "Refrigerator" do
     END
   end
 
-  it '.check_require should fail for set' do
+  it '.check_require should fail for ostruct' do
     check(<<-END)
       begin
-        Refrigerator.check_require 'set', :classes=>[:Set, [:SortedSet, :Set]]
+        Refrigerator.check_require 'ostruct'
       rescue
       else
         exit 1
@@ -59,7 +59,7 @@ describe "Refrigerator" do
     check("raise unless (Refrigerator.check_require(#{EXAMPLE.inspect}, :depends=>%w'set') rescue :foo) == :foo")
     check("raise unless (Refrigerator.check_require(#{EXAMPLE.inspect}, :depends=>%w'set', :modules=>[:A]) rescue :foo) == :foo")
     check("raise unless (Refrigerator.check_require(#{EXAMPLE.inspect}, :depends=>%w'set', :modules=>[:A], :classes=>[:B]) rescue :foo) == :foo")
-    check("Refrigerator.check_require(#{EXAMPLE.inspect}, :depends=>%w'set', :modules=>[:A], :classes=>[:B, [:C, 'B']])")
+    check("Refrigerator.check_require(#{EXAMPLE.inspect}, :depends=>%w'set', :modules=>[:A], :classes=>[:B, [:C, :B]])")
     check("Refrigerator.check_require(#{EXAMPLE.inspect}, :exclude=>%w'Object Enumerable')")
   end
 end
