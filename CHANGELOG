@@ -1,4 +1,10 @@
-=== master
+=== 1.2.0 (2018-04-11)
+
+* Support new classes and modules in Ruby 2.6 (jeremyevans)
+
+=== 1.1.0 (2018-02-16)
+
+* Support new classes and modules in Ruby 2.5 (jeremyevans)
 
 * Work when the input field separator is changed from the default (jeremyevans) (#1)
 
