@@ -21,4 +21,5 @@ make sure that don't make unexpected modifications/monkey patches
 to core classes.
 END
   s.add_development_dependency('minitest')
+  s.add_development_dependency "minitest-global_expectations"
 end
