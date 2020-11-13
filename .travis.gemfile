@@ -7,4 +7,5 @@ gem 'rake', '<10.0.0'
 if RUBY_VERSION < '2.4.0'
   # Until mintest 5.12.0 is fixed
   gem 'minitest', '5.11.3'
+  gem 'minitest-global_expectations'
 end
