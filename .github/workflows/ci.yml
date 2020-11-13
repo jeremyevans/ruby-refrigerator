@@ -21,7 +21,7 @@ jobs:
         ruby-version: ${{ matrix.ruby }}
         bundler-cache: true
       env:
-        BUNDLE_GEMFILE: .travis.gemfile
+        BUNDLE_GEMFILE: .ci.gemfile
     - run: bundle exec rake
       env:
-        BUNDLE_GEMFILE: .travis.gemfile
+        BUNDLE_GEMFILE: .ci.gemfile
