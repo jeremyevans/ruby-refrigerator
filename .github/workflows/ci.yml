@@ -23,3 +23,5 @@ jobs:
       env:
         BUNDLE_GEMFILE: .travis.gemfile
     - run: bundle exec rake
+      env:
+        BUNDLE_GEMFILE: .travis.gemfile
