@@ -22,4 +22,4 @@ jobs:
         bundler-cache: true
       env:
         BUNDLE_GEMFILE: .travis.gemfile
-    - run: rake
+    - run: bundle exec rake
