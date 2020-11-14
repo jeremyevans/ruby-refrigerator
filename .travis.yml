@@ -8,4 +8,4 @@ matrix:
       dist: trusty
 gemfile: .ci.gemfile
 before_install:
-  - gem install bundler || gem install bundler --version '< 2'
+  - gem install bundler --version '< 2'
