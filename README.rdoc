@@ -80,15 +80,15 @@ And an example using Roda, a ruby web toolkit:
     :classes=>[:Roda]
 
 Note that many stdlib libraries will fail +check_require+ unless you use the
-:exclude option, for example, +set+:
+:exclude option, for example, +date+:
 
-  Refrigerator.check_require 'set',
-    :classes=>[:Set, [:SortedSet, :Set]]
-  # Fails due to Enumerable#to_set addition
+  Refrigerator.check_require 'date',
+    :classes=>[:Date, [:DateTime, :Date]]
+  # Fails due to Time#to_date addition
 
-  Refrigerator.check_require 'set',
-    :classes=>[:Set, [:SortedSet, :Set]],
-    :exclude=>['Enumerable']
+  Refrigerator.check_require 'date',
+    :classes=>[:Date, [:DateTime, :Date]],
+    :exclude=>['Time']
   # => true
 
 === bin/check_require
