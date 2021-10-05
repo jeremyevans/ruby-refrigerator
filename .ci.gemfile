@@ -1,7 +1,6 @@
 source "https://rubygems.org"
 
-gemspec
-
+gem "minitest-global_expectations"
 gem 'rake', '<10.0.0'
 
 if RUBY_VERSION < '2.4.0'
