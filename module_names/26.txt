@@ -150,7 +150,6 @@ GC
 GC::Profiler
 Gem
 Gem::BasicSpecification
-Gem::BundlerVersionFinder
 Gem::CommandLineError
 Gem::ConflictError
 Gem::Dependency
