@@ -20,6 +20,12 @@ modified at runtime.  It can also be used to check libraries to
 make sure that don't make unexpected modifications/monkey patches
 to core classes.
 END
+  s.metadata = {
+    'bug_tracker_uri'   => 'https://github.com/jeremyevans/ruby-refrigerator/issues',
+    'changelog_uri'     => 'https://github.com/jeremyevans/ruby-refrigerator/blob/master/CHANGELOG',
+    'mailing_list_uri'  => 'https://github.com/jeremyevans/ruby-refrigerator/discussions',
+    'source_code_uri'   => 'https://github.com/jeremyevans/ruby-refrigerator',
+  }
   s.add_development_dependency('minitest')
   s.add_development_dependency "minitest-global_expectations"
 end
