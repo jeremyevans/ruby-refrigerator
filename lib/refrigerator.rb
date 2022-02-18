@@ -8,6 +8,7 @@ module Refrigerator
     split(/\s+/).
     select{|m| eval("defined?(#{m})")}.
     each(&:freeze).
+    reverse.
     freeze
 
   # Default frozen options hash
