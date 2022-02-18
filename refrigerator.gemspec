@@ -1,6 +1,6 @@
 spec = Gem::Specification.new do |s|
   s.name = 'refrigerator'
-  s.version = '1.4.0'
+  s.version = '1.4.1'
   s.platform = Gem::Platform::RUBY
   s.extra_rdoc_files = ["README.rdoc", "CHANGELOG", "MIT-LICENSE"]
   s.rdoc_options += ["--quiet", "--line-numbers", "--inline-source", '--title', 'Refrigerator: Freeze all core ruby classes', '--main', 'README.rdoc']
@@ -17,7 +17,7 @@ spec = Gem::Specification.new do |s|
 Refrigerator freezes all core classes.  It is designed to be used
 in production, to make sure that none of the core classes are
 modified at runtime.  It can also be used to check libraries to
-make sure that don't make unexpected modifications/monkey patches
+make sure that they don't make unexpected modifications/monkey patches
 to core classes.
 END
   s.metadata = {
