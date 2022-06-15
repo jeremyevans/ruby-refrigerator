@@ -1,3 +1,7 @@
+if ENV.delete('COVERAGE')
+  require_relative 'coverage_helper'
+end
+
 ENV['MT_NO_PLUGINS'] = '1' # Work around stupid autoloading of plugins
 require 'rubygems'
 gem 'minitest'
@@ -12,7 +16,7 @@ EXAMPLE = File.join(File.dirname(File.expand_path(__FILE__)), '../test/example')
 
 describe "Refrigerator" do
   def check(code)
-    system(RUBY, '-r', REFRIGERATOR, '-e', code).must_equal true
+    system(RUBY, '-e', "require #{REFRIGERATOR.inspect};\n"+code).must_equal true
   end
 
   it '.freeze_core should freeze all core classes' do
@@ -39,6 +43,7 @@ describe "Refrigerator" do
 
   it '.check_require should fail for ostruct' do
     check(<<-END)
+      exit(0) if defined?(OpenStruct)
       begin
         Refrigerator.check_require 'ostruct'
       rescue

@@ -1,7 +1,9 @@
 # Refrigerator allows for easily freezing core classes and modules.
 module Refrigerator
   version_int = RUBY_VERSION[0..2].sub('.', '').to_i
+  # :nocov:
   version_int = 31 if version_int > 31
+  # :nocov:
   
   # Array of strings containing class or module names.
   CORE_MODULES = File.read(File.expand_path(File.join(File.expand_path(__FILE__), "../../module_names/#{version_int}.txt"))).

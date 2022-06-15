@@ -25,6 +25,12 @@ end
 
 task :default => :spec
 
+desc "Run tests with coverage"
+task :spec_cov do
+  ENV['COVERAGE'] = '1'
+  sh "#{FileUtils::RUBY} test/refrigerator_test.rb"
+end
+
 ### RDoc
 
 RDOC_DEFAULT_OPTS = ["--quiet", "--line-numbers", "--inline-source", '--title', 'Refrigerator: Freeze core ruby classes']
