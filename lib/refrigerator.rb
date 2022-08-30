@@ -8,7 +8,7 @@ module Refrigerator
   # Array of strings containing class or module names.
   CORE_MODULES = File.read(File.expand_path(File.join(File.expand_path(__FILE__), "../../module_names/#{version_int}.txt"))).
     split(/\s+/).
-    select{|m| eval("defined?(#{m})")}.
+    select{|m| eval("defined?(#{m})", nil, __FILE__, __LINE__)}.
     each(&:freeze).
     reverse.
     freeze
@@ -19,7 +19,7 @@ module Refrigerator
   # Freeze core classes and modules.  Options:
   # :except :: Don't freeze any of the classes modules listed (array of strings)
   def self.freeze_core(opts=OPTS)
-    (CORE_MODULES - Array(opts[:except])).each{|m| eval(m).freeze}
+    (CORE_MODULES - Array(opts[:except])).each{|m| eval(m, nil, __FILE__, __LINE__).freeze}
     nil
   end
 
@@ -33,7 +33,7 @@ module Refrigerator
     require 'rubygems'
     Array(opts[:depends]).each{|f| require f}
     Array(opts[:modules]).each{|m| Object.const_set(m, Module.new)}
-    Array(opts[:classes]).each{|c, *sc| Object.const_set(c, Class.new(sc.empty? ? Object : eval(sc.first.to_s)))}
+    Array(opts[:classes]).each{|c, *sc| Object.const_set(c, Class.new(sc.empty? ? Object : eval(sc.first.to_s, nil, __FILE__, __LINE__)))}
     freeze_core(:except=>%w'Gem Gem::Specification Gem::Deprecate'+Array(opts[:exclude]))
     require file
   end

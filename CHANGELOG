@@ -1,3 +1,7 @@
+=== master
+
+* Set file and line for all eval calls, to ease debugging (jeremyevans)
+
 === 1.4.1 (2022-02-18)
 
 * Freeze constants in reverse order, fixes issues with rubygems starting in Ruby 3.1.1 (jeremyevans)
