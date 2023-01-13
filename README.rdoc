@@ -164,6 +164,8 @@ code similar to:
 
   ObjectSpace.each_object(Module){|m| p m.name}
 
+In addition, the +version_int+ variable in +refrigerator.rb+ needs to be updated.
+
 = License
 
 MIT

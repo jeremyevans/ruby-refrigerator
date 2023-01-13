@@ -2,7 +2,7 @@
 module Refrigerator
   version_int = RUBY_VERSION[0..2].sub('.', '').to_i
   # :nocov:
-  version_int = 31 if version_int > 31
+  version_int = 32 if version_int > 32
   # :nocov:
   
   # Array of strings containing class or module names.
