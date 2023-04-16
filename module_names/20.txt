@@ -7,7 +7,6 @@ Binding
 Class
 Comparable
 Complex
-Complex::compatible
 ConditionVariable
 Data
 Date
@@ -35,6 +34,7 @@ Errno::EAGAIN
 Errno::EALREADY
 Errno::EAUTH
 Errno::EBADF
+Errno::EBADMSG
 Errno::EBADRPC
 Errno::EBUSY
 Errno::ECANCELED
@@ -88,12 +88,14 @@ Errno::ENOTBLK
 Errno::ENOTCONN
 Errno::ENOTDIR
 Errno::ENOTEMPTY
+Errno::ENOTRECOVERABLE
 Errno::ENOTSOCK
 Errno::ENOTSUP
 Errno::ENOTTY
 Errno::ENXIO
 Errno::EOPNOTSUPP
 Errno::EOVERFLOW
+Errno::EOWNERDEAD
 Errno::EPERM
 Errno::EPFNOSUPPORT
 Errno::EPIPE
@@ -101,6 +103,7 @@ Errno::EPROCLIM
 Errno::EPROCUNAVAIL
 Errno::EPROGMISMATCH
 Errno::EPROGUNAVAIL
+Errno::EPROTO
 Errno::EPROTONOSUPPORT
 Errno::EPROTOTYPE
 Errno::ERANGE
@@ -186,7 +189,6 @@ MonitorMixin::ConditionVariable
 MonitorMixin::ConditionVariable::Timeout
 Mutex
 NameError
-NameError::message
 NilClass
 NoMemoryError
 NoMethodError
@@ -206,7 +208,6 @@ Random
 Range
 RangeError
 Rational
-Rational::compatible
 RbConfig
 Regexp
 RegexpError
@@ -240,4 +241,3 @@ TrueClass
 TypeError
 UnboundMethod
 ZeroDivisionError
-fatal

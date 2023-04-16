@@ -7,13 +7,10 @@ Class
 ClosedQueueError
 Comparable
 Complex
-Complex::compatible
 Data
 DidYouMean
 DidYouMean::ClassNameChecker
-DidYouMean::ClassNameChecker::ClassName
 DidYouMean::Correctable
-DidYouMean::DeprecatedMapping
 DidYouMean::Formatter
 DidYouMean::Jaro
 DidYouMean::JaroWinkler
@@ -144,8 +141,6 @@ Errno::NOERROR
 ErrorHighlight
 ErrorHighlight::CoreExt
 ErrorHighlight::DefaultFormatter
-ErrorHighlight::Spotter
-ErrorHighlight::Spotter::NonAscii
 Exception
 FalseClass
 Fiber
@@ -241,7 +236,6 @@ Monitor
 MonitorMixin
 MonitorMixin::ConditionVariable
 NameError
-NameError::message
 NilClass
 NoMatchingPatternError
 NoMatchingPatternKeyError
@@ -274,7 +268,6 @@ Random::Formatter
 Range
 RangeError
 Rational
-Rational::compatible
 RbConfig
 Refinement
 Regexp
@@ -312,7 +305,6 @@ Thread::SizedQueue
 ThreadError
 ThreadGroup
 Time
-Time::tm
 TracePoint
 TrueClass
 TypeError
@@ -320,6 +312,4 @@ UnboundMethod
 UncaughtThrowError
 UnicodeNormalize
 Warning
-Warning::buffer
 ZeroDivisionError
-fatal

@@ -166,6 +166,11 @@ code similar to:
 
 In addition, the +version_int+ variable in +refrigerator.rb+ needs to be updated.
 
+== Internal Classes and Modules
+
+Internal classes and modules only reachable through +ObjectSpace+, such as +fatal+ and +Time::tm+
+are not frozen by refrigerator.
+
 = License
 
 MIT

@@ -7,10 +7,8 @@ Class
 ClosedQueueError
 Comparable
 Complex
-Complex::compatible
 DidYouMean
 DidYouMean::ClassNameChecker
-DidYouMean::ClassNameChecker::ClassName
 DidYouMean::Correctable
 DidYouMean::Jaro
 DidYouMean::JaroWinkler
@@ -152,6 +150,7 @@ GC
 GC::Profiler
 Gem
 Gem::BasicSpecification
+Gem::BundlerVersionFinder
 Gem::CommandLineError
 Gem::ConflictError
 Gem::ConsoleUI
@@ -235,7 +234,6 @@ Monitor
 MonitorMixin
 MonitorMixin::ConditionVariable
 NameError
-NameError::message
 NilClass
 NoMatchingPatternError
 NoMemoryError
@@ -267,7 +265,6 @@ Random::Formatter
 Range
 RangeError
 Rational
-Rational::compatible
 RbConfig
 Regexp
 RegexpError
@@ -300,7 +297,6 @@ Thread::SizedQueue
 ThreadError
 ThreadGroup
 Time
-Time::tm
 TracePoint
 TrueClass
 TypeError
@@ -308,6 +304,4 @@ UnboundMethod
 UncaughtThrowError
 UnicodeNormalize
 Warning
-Warning::buffer
 ZeroDivisionError
-fatal

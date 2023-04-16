@@ -19,6 +19,7 @@ Errno::EAFNOSUPPORT
 Errno::EAGAIN
 Errno::EALREADY
 Errno::EBADF
+Errno::EBADMSG
 Errno::EBUSY
 Errno::ECHILD
 Errno::ECONNABORTED
@@ -72,6 +73,7 @@ Errno::EOVERFLOW
 Errno::EPERM
 Errno::EPFNOSUPPORT
 Errno::EPIPE
+Errno::EPROTO
 Errno::EPROTONOSUPPORT
 Errno::EPROTOTYPE
 Errno::ERANGE
@@ -112,7 +114,6 @@ Math
 Method
 Module
 NameError
-NameError::message
 NilClass
 NoMemoryError
 NoMethodError
@@ -154,4 +155,3 @@ TrueClass
 TypeError
 UnboundMethod
 ZeroDivisionError
-fatal

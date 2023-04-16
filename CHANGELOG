@@ -1,3 +1,7 @@
+= master
+
+* Do not attempt to access deprecated, internal, or private modules or classes (jeremyevans) (#11)
+
 === 1.5.1 (2023-01-13)
 
 * Fix the support new classes and modules in Ruby 3.2 (jeremyevans)

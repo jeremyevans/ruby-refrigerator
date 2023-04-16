@@ -7,11 +7,9 @@ Class
 ClosedQueueError
 Comparable
 Complex
-Complex::compatible
 Delegator
 DidYouMean
 DidYouMean::ClassNameChecker
-DidYouMean::ClassNameChecker::ClassName
 DidYouMean::Correctable
 DidYouMean::Jaro
 DidYouMean::JaroWinkler
@@ -204,8 +202,6 @@ IO::EINPROGRESSWaitReadable
 IO::EINPROGRESSWaitWritable
 IO::WaitReadable
 IO::WaitWritable
-IO::generic_readable
-IO::generic_writable
 IOError
 IndexError
 Integer
@@ -225,7 +221,6 @@ MonitorMixin
 MonitorMixin::ConditionVariable
 MonitorMixin::ConditionVariable::Timeout
 NameError
-NameError::message
 NilClass
 NoMemoryError
 NoMethodError
@@ -247,7 +242,6 @@ Random::Formatter
 Range
 RangeError
 Rational
-Rational::compatible
 RbConfig
 Regexp
 RegexpError
@@ -282,7 +276,6 @@ Thread::SizedQueue
 ThreadError
 ThreadGroup
 Time
-Time::tm
 TracePoint
 TrueClass
 TypeError
@@ -309,6 +302,4 @@ UnboundMethod
 UncaughtThrowError
 UnicodeNormalize
 Warning
-Warning::buffer
 ZeroDivisionError
-fatal

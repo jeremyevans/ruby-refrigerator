@@ -12,7 +12,7 @@ end
 
 desc "Generate module_names/*.txt file for current ruby version"
 task :module_names do
-  sh "#{FileUtils::RUBY} -e 'a = []; ObjectSpace.each_object(Module){|m| a << m.name.to_s}; File.open(\"module_names/#{RUBY_VERSION[0..2].sub('.', '')}.txt\", \"wb\"){|f| f.write(a.reject{|m| m.empty?}.sort.join(\"\\n\")); f.write(\"\\n\")}'"
+  sh "#{FileUtils::RUBY} gen_module_names.rb"
 end
 
 
@@ -57,4 +57,3 @@ rdoc_task_class.new do |rdoc|
   rdoc.options += RDOC_OPTS
   rdoc.rdoc_files.add %w"README.rdoc CHANGELOG MIT-LICENSE lib/**/*.rb"
 end
-
