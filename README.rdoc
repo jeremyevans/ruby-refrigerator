@@ -159,17 +159,11 @@ Here are a couple more examples, using Sequel and Roda:
 The list of constants that +freeze_core+ will freeze are stored in the module_names/*.txt files
 in the repository, with separate files per ruby minor version.  When new ruby minor versions are
 released, the +module_names+ rake task can be run with the new ruby minor version, and it will
-generate the appropriate file.  This task works by looking at ObjectSpace for all modules, with
-code similar to:
+generate the appropriate file.
 
-  ObjectSpace.each_object(Module){|m| p m.name}
+== Skipped Classes and Modules
 
-In addition, the +version_int+ variable in +refrigerator.rb+ needs to be updated.
-
-== Internal Classes and Modules
-
-Internal classes and modules only reachable through +ObjectSpace+, such as +fatal+ and +Time::tm+
-are not frozen by refrigerator.
+Internal, deprecated, and private classes and modules are not frozen by refrigerator.
 
 = License
 
