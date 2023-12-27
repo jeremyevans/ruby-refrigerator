@@ -1,3 +1,7 @@
+=== master
+
+* Support new classes and modules in Ruby 3.3 (jeremyevans)
+
 === 1.6.0 (2023-04-18)
 
 * Do not attempt to access deprecated, internal, or private modules or classes (jeremyevans) (#11)
