@@ -191,7 +191,6 @@ Gem::Requirement::BadRequirementError
 Gem::RubyVersionMismatch
 Gem::RuntimeRequirementNotMetError
 Gem::SourceFetchProblem
-Gem::SpecificGemNotFoundException
 Gem::Specification
 Gem::StubSpecification
 Gem::StubSpecification::StubLine
