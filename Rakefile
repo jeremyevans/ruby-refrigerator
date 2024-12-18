@@ -20,7 +20,7 @@ end
 
 desc "Run specs"
 task :spec do
-  sh "#{FileUtils::RUBY} #{"-w" if RUBY_VERSION >= '3'} test/refrigerator_test.rb"
+  sh "#{FileUtils::RUBY} #{"-w" if RUBY_VERSION >= '3'} #{'-W:strict_unused_block' if RUBY_VERSION >= '3.4'} test/refrigerator_test.rb"
 end
 
 task :default => :spec
