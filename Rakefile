@@ -33,27 +33,24 @@ end
 
 ### RDoc
 
-RDOC_DEFAULT_OPTS = ["--quiet", "--line-numbers", "--inline-source", '--title', 'Refrigerator: Freeze core ruby classes']
+desc "Generate rdoc"
+task :rdoc do
+  rdoc_dir = "rdoc"
+  rdoc_opts = ["--line-numbers", "--inline-source", '--title', 'Refrigerator: Freeze core ruby classes']
 
-begin
-  gem 'rdoc'
-  gem 'hanna'
-  RDOC_DEFAULT_OPTS.concat(['-f', 'hanna'])
-rescue Gem::LoadError
-end
+  begin
+    gem 'hanna'
+    rdoc_opts.concat(['-f', 'hanna'])
+  rescue Gem::LoadError
+  end
 
-rdoc_task_class = begin
-  require "rdoc/task"
-  RDoc::Task
-rescue LoadError
-  require "rake/rdoctask"
-  Rake::RDocTask
-end
+  rdoc_opts.concat(['--main', 'README.rdoc', "-o", rdoc_dir] +
+    %w"README.rdoc CHANGELOG MIT-LICENSE" +
+    Dir["lib/**/*.rb"]
+  )
 
-RDOC_OPTS = RDOC_DEFAULT_OPTS + ['--main', 'README.rdoc']
+  FileUtils.rm_rf(rdoc_dir)
 
-rdoc_task_class.new do |rdoc|
-  rdoc.rdoc_dir = "rdoc"
-  rdoc.options += RDOC_OPTS
-  rdoc.rdoc_files.add %w"README.rdoc CHANGELOG MIT-LICENSE lib/**/*.rb"
+  require "rdoc"
+  RDoc::RDoc.new.document(rdoc_opts)
 end
