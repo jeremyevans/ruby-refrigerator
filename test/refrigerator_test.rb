@@ -41,11 +41,11 @@ describe "Refrigerator" do
     END
   end
 
-  it '.check_require should fail for ostruct' do
+  it '.check_require should fail for erb' do
     check(<<-END)
-      exit(0) if defined?(OpenStruct)
+      exit(0) if defined?(ERB)
       begin
-        Refrigerator.check_require 'ostruct'
+        Refrigerator.check_require 'erb'
       rescue
       else
         exit 1
