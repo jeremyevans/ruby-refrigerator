@@ -5,9 +5,9 @@ module Refrigerator
     File.expand_path(File.join(File.expand_path(__FILE__), "../../module_names/#{version_int}.txt"))
   end
   if version_int >= 18
-    # :nocov:
+    # simplecov:disable
     version_int -= 1 until File.file?(filepath.call)
-    # :nocov:
+    # simplecov:enable
   end
   
   # Array of strings containing class or module names.
